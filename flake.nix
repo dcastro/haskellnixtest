@@ -33,11 +33,11 @@
             };
           })
         ];
-        pkgs = import nixpkgs {
+        pkgs_ = import nixpkgs {
           inherit system overlays;
           inherit (haskellNix) config;
         };
-
+        pkgs = pkgs_.pkgsCross.aarch64-multiplatform;
         flake = pkgs.helloProject.flake {
           # This adds support for `nix build .#js-unknown-ghcjs:hello:exe:hello`
           # crossPlatforms = p: [p.ghcjs];

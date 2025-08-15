@@ -1,0 +1,13 @@
+# Build tools
+## Stack
+.stack-work/
+
+## Cabal
+dist-newstyle/
+.ghc.environment.*
+cabal.project.local
+
+logs/
+
+# nix artifacts
+result

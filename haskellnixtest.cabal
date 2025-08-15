@@ -49,7 +49,9 @@ executable haskellnixtest-exe
   build-depends:
       base >=4.7 && <5
     , haskellnixtest
+    , jose
     , th-orphans
+    , warp
   default-language: Haskell2010
 
 test-suite haskellnixtest-test

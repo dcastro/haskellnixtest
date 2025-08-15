@@ -18,7 +18,8 @@
               # Use stack.yaml instead of cabal.project
               projectFileName = "stack.yaml";
 
-              compiler-nix-name = "ghc9102";
+              # compiler-nix-name = "ghc9102";
+              compiler-nix-name = "ghc9122";
 
               # https://github.com/input-output-hk/haskell.nix/issues/2423
               modules = [{

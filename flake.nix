@@ -41,20 +41,20 @@
             };
           })
         ];
-        pkgs_ = import nixpkgs {
+        pkgs = import nixpkgs {
           inherit system overlays;
           inherit (haskellNix) config;
         };
-        # pkgs = pkgs_.pkgsCross.aarch64-multiplatform;
-        pkgs = pkgs_.pkgsCross.aarch64-multiplatform-musl;
-        flake = pkgs.helloProject.flake {
-          # This adds support for `nix build .#js-unknown-ghcjs:hello:exe:hello`
-          # crossPlatforms = p: [p.ghcjs];
-        };
-      in flake // {
-        packages = flake.packages // {
-          # Built by `nix build .`
-          default = flake.packages."haskellnixtest:exe:haskellnixtest-exe";
+
+      in {
+        packages = {
+          aarch64-multiplatform =
+            (pkgs.pkgsCross.aarch64-multiplatform.helloProject.flake
+              { }).packages."haskellnixtest:exe:haskellnixtest-exe";
+          aarch64-multiplatform-musl =
+            (pkgs.pkgsCross.aarch64-multiplatform-musl.helloProject.flake
+              { }).packages."haskellnixtest:exe:haskellnixtest-exe";
+
         };
       });
 }

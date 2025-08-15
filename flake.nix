@@ -18,7 +18,8 @@
               # Use stack.yaml instead of cabal.project
               projectFileName = "stack.yaml";
 
-              compiler-nix-name = "ghc967";
+              compiler-nix-name = "ghc9102";
+
               # This is used by `nix develop .` to open a shell for use with
               # `cabal`, `hlint` and `haskell-language-server`
               shell.tools = {
@@ -38,6 +39,7 @@
           inherit (haskellNix) config;
         };
         pkgs = pkgs_.pkgsCross.aarch64-multiplatform;
+        # pkgs = pkgs_.pkgsCross.aarch64-multiplatform-musl;
         flake = pkgs.helloProject.flake {
           # This adds support for `nix build .#js-unknown-ghcjs:hello:exe:hello`
           # crossPlatforms = p: [p.ghcjs];

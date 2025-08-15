@@ -20,6 +20,12 @@
 
               compiler-nix-name = "ghc9102";
 
+              # https://github.com/input-output-hk/haskell.nix/issues/2423
+              modules = [{
+                packages.directory.flags.os-string = true;
+                packages.unix.flags.os-string = true;
+              }];
+
               # This is used by `nix develop .` to open a shell for use with
               # `cabal`, `hlint` and `haskell-language-server`
               shell.tools = {

@@ -46,15 +46,37 @@
           inherit (haskellNix) config;
         };
 
+        native = (pkgs.helloProject.flake
+          { }).packages."haskellnixtest:exe:haskellnixtest-exe";
+
+        aarch64 = (pkgs.pkgsCross.aarch64-multiplatform.helloProject.flake
+          { }).packages."haskellnixtest:exe:haskellnixtest-exe";
+
+        aarch64-musl =
+          (pkgs.pkgsCross.aarch64-multiplatform-musl.helloProject.flake
+            { }).packages."haskellnixtest:exe:haskellnixtest-exe";
+
       in {
         packages = {
-          aarch64-multiplatform =
-            (pkgs.pkgsCross.aarch64-multiplatform.helloProject.flake
-              { }).packages."haskellnixtest:exe:haskellnixtest-exe";
-          aarch64-multiplatform-musl =
-            (pkgs.pkgsCross.aarch64-multiplatform-musl.helloProject.flake
-              { }).packages."haskellnixtest:exe:haskellnixtest-exe";
+          inherit native;
+          inherit aarch64;
+          inherit aarch64-musl;
 
+          docker-native = pkgs.dockerTools.buildImage {
+            name = "haskellnixtest-docker";
+            config = { Cmd = [ "${native}/bin/haskellnixtest-exe" ]; };
+          };
+
+          docker-aarch64 = pkgs.dockerTools.buildImage {
+            # Docs: https://nixos.org/manual/nixpkgs/stable/#ssec-pkgs-dockerTools-buildImage
+            name = "haskellnixtest-docker-aarch64";
+            architecture = "arm64";
+            tag = "latest";
+            config = {
+              # Docs: https://github.com/moby/moby/blob/46f7ab808b9504d735d600e259ca0723f76fb164/image/spec/spec.md#image-json-field-descriptions
+              Cmd = [ "${aarch64}/bin/haskellnixtest-exe" ];
+            };
+          };
         };
       });
 }
